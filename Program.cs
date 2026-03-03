@@ -108,10 +108,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Enable SQLite foreign keys
+// Run migrations automatically + enable foreign keys
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.OpenConnection();
+    db.Database.Migrate();
     db.Database.ExecuteSqlRaw("PRAGMA foreign_keys = ON;");
 }
 

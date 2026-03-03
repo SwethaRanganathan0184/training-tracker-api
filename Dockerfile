@@ -13,8 +13,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app/out .
 
-EXPOSE 10000
+# Install dotnet ef tool for migrations
+COPY --from=build /app /src
 
+EXPOSE 10000
 ENV ASPNETCORE_URLS=http://+:10000
 
 ENTRYPOINT ["dotnet", "TrainingTrackerAPI.dll"]

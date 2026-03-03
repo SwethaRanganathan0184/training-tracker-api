@@ -18,11 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReact", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+{
+    policy.WithOrigins("https://training-tracker-ui.onrender.com")
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+});
 });
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>

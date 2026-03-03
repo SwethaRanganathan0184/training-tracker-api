@@ -73,11 +73,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ✅ STEP 2 — Enable foreign keys AFTER migration
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.ExecuteSqlRaw("PRAGMA foreign_keys = ON;");
-}
+
 
 // ✅ STEP 3 — Seed roles AFTER tables exist
 using (var scope = app.Services.CreateScope())

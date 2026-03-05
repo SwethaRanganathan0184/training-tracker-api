@@ -38,7 +38,10 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 .AddDefaultTokenProviders()
 .AddSignInManager();
 
-var jwtKey = builder.Configuration["Jwt:Key"]!;
+// ✅ FIX: Read Jwt:Key in a way that works BOTH locally and on Render
+var jwtKey = builder.Configuration["Jwt:Key"]
+          ?? builder.Configuration["Jwt__Key"]
+          ?? throw new Exception("JWT Key is not configured!");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -65,7 +68,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// ✅ CORS must be FIRST — before everything
+// ✅ CORS must be FIRST
 app.UseCors("AllowReact");
 
 // ✅ Run migrations
@@ -83,17 +86,13 @@ using (var scope = app.Services.CreateScope())
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
-        {
             await roleManager.CreateAsync(new IdentityRole(role));
-        }
     }
 }
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.Run();
